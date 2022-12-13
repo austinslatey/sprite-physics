@@ -26,13 +26,27 @@ const gameState = {};
 function create() {
   gameState.player = this.physics.add.sprite(225, 440, "codey").setScale(0.5);
   // Add your code below:
- const platforms = this.physics.add.staticGroup();
- platforms.create(225, 510, 'platform')
- gameState.player.setCollideWorldBounds(true);
- this.physics.add.collider(gameState.player, platforms);
+  const platforms = this.physics.add.staticGroup();
+  platforms.create(225, 510, 'platform');
+
+  gameState.player.setCollideWorldBounds(true);
+  this.physics.add.collider(gameState.player, platforms);
+
+  // Creating cursor object
+  gameState.cursors = this.input.keyboard.createCursorKeys();
+
 }
 
-function update() {}
+function update() {
+  // Conditionals for cursors 
+  if (gameState.cursors.left.isDown) {
+    gameState.player.setVelocityX(-160);
+  } else if (gameState.cursors.right.isDown) {
+    gameState.player.setVelocityX(160);
+  } else {
+    gameState.player.setVelocityX(0);
+  }
+}
 
 const config = {
   type: Phaser.AUTO,
