@@ -42,6 +42,20 @@ function create() {
     const xCoord = Math.random() * 450;
     bugs.create(xCoord, 10, 'bug1');
   }
+  
+  // Timed events to loop enemies
+  const bugGenLoop = this.time.addEvent({
+    callback: bugGen,
+    delay: 150,
+    callbackScope: this,
+    loop: true,
+  });
+
+  // Colliders for Enemies & Platforms
+  this.physics.add.collider(bugs, platform,
+    function(singleEnemy) {
+      singleEnemy.destroy();
+    });
 
 }
 
