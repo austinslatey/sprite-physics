@@ -35,6 +35,14 @@ function create() {
   // Creating cursor object
   gameState.cursors = this.input.keyboard.createCursorKeys();
 
+
+  // Create Enemies
+  const bugs = this.physics.add.group();
+  function bugGen() {
+    const xCoord = Math.random() * 450;
+    bugs.create(xCoord, 10, 'bug1');
+  }
+
 }
 
 function update() {
