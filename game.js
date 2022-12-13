@@ -21,7 +21,7 @@ function preload() {
   );
 }
 
-const gameState = {};
+const gameState = { score: 0 };
 
 function create() {
   gameState.player = this.physics.add.sprite(225, 440, "codey").setScale(0.5);
@@ -52,10 +52,19 @@ function create() {
   });
 
   // Colliders for Enemies & Platforms
-  this.physics.add.collider(bugs, platform,
-    function(singleEnemy) {
-      singleEnemy.destroy();
+  this.physics.add.collider(bugs, platforms,
+    function(bug) {
+      bug.destroy();
+
+      gameState.score += 10;
+      gameState.scoreText.setText(`Score: ${gameState.score}`)
     });
+
+  // Adding score property
+  gameState.scoreText = this.add.text(16, 16, 'Score: 0', {
+    fontSize: '15px',
+    fill: '#000000'
+  });  
 
 }
 
