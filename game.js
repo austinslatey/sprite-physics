@@ -21,13 +21,15 @@ function preload() {
   );
 }
 
-const gameState = { score: 0 };
+const gameState = {
+  score: 0,
+};
 
 function create() {
   gameState.player = this.physics.add.sprite(225, 440, "codey").setScale(0.5);
   // Add your code below:
   const platforms = this.physics.add.staticGroup();
-  platforms.create(225, 510, 'platform');
+  platforms.create(225, 510, "platform");
 
   gameState.player.setCollideWorldBounds(true);
   this.physics.add.collider(gameState.player, platforms);
@@ -35,14 +37,13 @@ function create() {
   // Creating cursor object
   gameState.cursors = this.input.keyboard.createCursorKeys();
 
-
   // Create Enemies
   const bugs = this.physics.add.group();
   function bugGen() {
     const xCoord = Math.random() * 450;
-    bugs.create(xCoord, 10, 'bug1');
+    bugs.create(xCoord, 10, "bug1");
   }
-  
+
   // Timed events to loop enemies
   const bugGenLoop = this.time.addEvent({
     callback: bugGen,
@@ -52,24 +53,44 @@ function create() {
   });
 
   // Colliders for Enemies & Platforms
-  this.physics.add.collider(bugs, platforms,
-    function(bug) {
-      bug.destroy();
+  this.physics.add.collider(bugs, platforms, function (bug) {
+    bug.destroy();
 
-      gameState.score += 10;
-      gameState.scoreText.setText(`Score: ${gameState.score}`)
-    });
+    gameState.score += 10;
+    gameState.scoreText.setText(`Score: ${gameState.score}`);
+  });
 
   // Adding score property
-  gameState.scoreText = this.add.text(16, 16, 'Score: 0', {
-    fontSize: '15px',
-    fill: '#000000'
-  });  
+  gameState.scoreText = this.add.text(16, 16, "Score: 0", {
+    fontSize: "15px",
+    fill: "#000000",
+  });
 
+  // End the game on collision
+  this.physics.add.collider(gameState.player, bugs, () => {
+    bugGenLoop.destroy();
+    this.physics.pause();
+
+    this.add.text(152, 270, "Game Over", {
+      fontSize: "25px",
+      fill: "#000000",
+    });
+
+    this.add.text(152, 270, "Click to Restart", {
+      fontSize: "25px",
+      fill: "#000000",
+    });
+
+    // Reset the game
+    this.input.on("pointerup", () => {
+      gameState.score = 0;
+      this.scene.restart();
+    });
+  });
 }
 
 function update() {
-  // Conditionals for cursors 
+  // Conditionals for cursors
   if (gameState.cursors.left.isDown) {
     gameState.player.setVelocityX(-160);
   } else if (gameState.cursors.right.isDown) {
