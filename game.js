@@ -26,8 +26,10 @@ const gameState = {};
 function create() {
   gameState.player = this.physics.add.sprite(225, 440, "codey").setScale(0.5);
   // Add your code below:
- let platforms = this.physics.add.staticGroup();
+ const platforms = this.physics.add.staticGroup();
  platforms.create(225, 510, 'platform')
+ gameState.player.setCollideWorldBounds(true);
+ this.physics.add.collider(gameState.player, platforms);
 }
 
 function update() {}
